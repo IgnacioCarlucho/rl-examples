@@ -94,7 +94,7 @@ class PPO(object):
                 tf.summary.scalar("loss", loss_pi)
 
             with tf.variable_scope('value_function'):
-                # Sometimes values clipping helps, sometimes just using raw residuals is better ¯\_(ツ)_/¯
+                # Sometimes values clipping helps, sometimes just using raw residuals is better 
                 clipped_value_estimate = vf_old + tf.clip_by_value(self.v - vf_old, -epsilon_decay, epsilon_decay)
                 loss_vf1 = tf.squared_difference(clipped_value_estimate, batch["rewards"])
                 loss_vf2 = tf.squared_difference(self.v, batch["rewards"])
@@ -220,10 +220,10 @@ if __name__ == '__main__':
     # ENVIRONMENT = 'Pong-v0'
 
     # Continuous environments
-    # ENVIRONMENT = 'Pendulum-v0'
+    ENVIRONMENT = 'Pendulum-v0'
     # ENVIRONMENT = 'MountainCarContinuous-v0'
     # ENVIRONMENT = 'LunarLanderContinuous-v2'
-    ENVIRONMENT = 'BipedalWalker-v2'
+    # ENVIRONMENT = 'BipedalWalker-v2'
     # ENVIRONMENT = 'BipedalWalkerHardcore-v2'
     # ENVIRONMENT = 'CarRacing-v0'
 
@@ -231,7 +231,7 @@ if __name__ == '__main__':
     SUMMARY_DIR = os.path.join(OUTPUT_RESULTS_DIR, "PPO", ENVIRONMENT, TIMESTAMP)
 
     env = gym.make(ENVIRONMENT)
-    env = wrappers.Monitor(env, os.path.join(SUMMARY_DIR, ENVIRONMENT), video_callable=None)
+    # env = wrappers.Monitor(env, os.path.join(SUMMARY_DIR, ENVIRONMENT), video_callable=None)
     ppo = PPO(env, SUMMARY_DIR, gpu=True)
 
     if MODEL_RESTORE_PATH is not None:
