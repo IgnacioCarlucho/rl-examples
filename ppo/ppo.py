@@ -177,6 +177,8 @@ class PPO(object):
             if self.cnn:
                 if self.greyscale:
                     state_in = tf.image.rgb_to_grayscale(state_in)
+                else:
+                    state_in = tf.to_float(state_in) / 255.0
                 conv1 = tf.layers.conv2d(inputs=state_in, filters=32, kernel_size=8, strides=4, activation=tf.nn.relu)
                 conv2 = tf.layers.conv2d(inputs=conv1, filters=64, kernel_size=4, strides=2, activation=tf.nn.relu)
                 conv3 = tf.layers.conv2d(inputs=conv2, filters=64, kernel_size=3, strides=1, activation=tf.nn.relu)
@@ -202,6 +204,8 @@ class PPO(object):
             if self.cnn:
                 if self.greyscale:
                     state_in = tf.image.rgb_to_grayscale(state_in)
+                else:
+                    state_in = tf.to_float(state_in) / 255.0
                 conv1 = tf.layers.conv2d(inputs=state_in, filters=32, kernel_size=8, strides=4, activation=tf.nn.relu)
                 conv2 = tf.layers.conv2d(inputs=conv1, filters=64, kernel_size=4, strides=2, activation=tf.nn.relu)
                 conv3 = tf.layers.conv2d(inputs=conv2, filters=64, kernel_size=3, strides=1, activation=tf.nn.relu)
@@ -245,7 +249,7 @@ if __name__ == '__main__':
     env = gym.make(ENVIRONMENT)
     env = wp.wrappers(env)
     # env = wrappers.Monitor(env, os.path.join(SUMMARY_DIR, ENVIRONMENT), video_callable=None)
-    ppo = PPO(env, SUMMARY_DIR, gpu=args.gpu)
+    ppo = PPO(env, SUMMARY_DIR, gpu=args.gpu, greyscale=False)
 
     if MODEL_RESTORE_PATH is not None:
         ppo.restore_model(MODEL_RESTORE_PATH)
