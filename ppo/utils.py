@@ -1,7 +1,16 @@
 import numpy as np
 import tensorflow as tf
 import scipy.signal
+import argparse
 
+
+def str2bool(v):
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
 
 def add_histogram(writer, tag, values, step, bins=1000):
     """

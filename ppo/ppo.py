@@ -16,10 +16,19 @@ import scipy.signal
 from gym import wrappers
 from datetime import datetime
 from time import time
-from utils import RunningStats, discount, add_histogram
+from utils import RunningStats, discount, add_histogram, str2bool
+import argparse
 OUTPUT_RESULTS_DIR = "./"
 
-EP_MAX = 10000
+
+parser = argparse.ArgumentParser('deepid')
+parser.add_argument("--gpu", type=str2bool, nargs='?', const=True, default=True, help="Use gpu or not?")
+parser.add_argument("--env", type=str, default='Pendulum-v0')
+parser.add_argument('--ep_max', type=int, default=10000)
+args = parser.parse_args()
+
+
+EP_MAX = args.ep_max
 GAMMA = 0.99
 LAMBDA = 0.95
 ENTROPY_BETA = 0.01  # 0.01 for discrete, 0.0 for continuous
@@ -220,19 +229,21 @@ if __name__ == '__main__':
     # ENVIRONMENT = 'Pong-v0'
 
     # Continuous environments
-    ENVIRONMENT = 'Pendulum-v0'
+    # ENVIRONMENT = 'Pendulum-v0'
     # ENVIRONMENT = 'MountainCarContinuous-v0'
     # ENVIRONMENT = 'LunarLanderContinuous-v2'
     # ENVIRONMENT = 'BipedalWalker-v2'
     # ENVIRONMENT = 'BipedalWalkerHardcore-v2'
     # ENVIRONMENT = 'CarRacing-v0'
 
+    ENVIRONMENT = args.env
+    print(ENVIRONMENT)
     TIMESTAMP = datetime.now().strftime("%Y%m%d-%H%M%S")
     SUMMARY_DIR = os.path.join(OUTPUT_RESULTS_DIR, "PPO", ENVIRONMENT, TIMESTAMP)
 
     env = gym.make(ENVIRONMENT)
     # env = wrappers.Monitor(env, os.path.join(SUMMARY_DIR, ENVIRONMENT), video_callable=None)
-    ppo = PPO(env, SUMMARY_DIR, gpu=True)
+    ppo = PPO(env, SUMMARY_DIR, gpu=args.gpu)
 
     if MODEL_RESTORE_PATH is not None:
         ppo.restore_model(MODEL_RESTORE_PATH)
