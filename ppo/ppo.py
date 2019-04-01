@@ -18,6 +18,7 @@ from datetime import datetime
 from time import time
 from utils import RunningStats, discount, add_histogram, str2bool
 import argparse
+import wrappers as wp
 OUTPUT_RESULTS_DIR = "./"
 
 
@@ -242,6 +243,7 @@ if __name__ == '__main__':
     SUMMARY_DIR = os.path.join(OUTPUT_RESULTS_DIR, "PPO", ENVIRONMENT, TIMESTAMP)
 
     env = gym.make(ENVIRONMENT)
+    env = wp.wrappers(env)
     # env = wrappers.Monitor(env, os.path.join(SUMMARY_DIR, ENVIRONMENT), video_callable=None)
     ppo = PPO(env, SUMMARY_DIR, gpu=args.gpu)
 
@@ -332,12 +334,13 @@ if __name__ == '__main__':
 
     # Run trained policy
     env = gym.make(ENVIRONMENT)
-    env = wrappers.Monitor(env, os.path.join(SUMMARY_DIR, ENVIRONMENT + "_trained"), video_callable=None)
+    env = wp.wrappers(env)
+    # env = wrappers.Monitor(env, os.path.join(SUMMARY_DIR, ENVIRONMENT + "_trained"), video_callable=None)
     while True:
         s = env.reset()
         ep_r, ep_t = 0, 0
         while True:
-            env.render()
+            # env.render()
             a, v = ppo.evaluate_state(s, stochastic=False)
             if not ppo.discrete:
                 a = np.clip(a, env.action_space.low, env.action_space.high)
