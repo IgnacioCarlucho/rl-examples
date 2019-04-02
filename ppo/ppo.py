@@ -265,13 +265,13 @@ if __name__ == '__main__':
         s = env.reset()
         ep_r, ep_t, ep_a = 0, 0, []
 
-        print(s.shape,ppo.greyscale)
+        # print(s.shape,ppo.greyscale)
         #numpy_horizontal = np.hstack((np.array(s)[:,:,0], np.array(s)[:,:,1], np.array(s)[:,:,2],np.array(s)[:,:,3]))
         #cv2.imshow('image', numpy_horizontal)
         #cv2.waitKey(1)
         #print(s)
         #sleep(1)
-        exit()
+        # exit()
         while True:
             a, v = ppo.evaluate_state(s)
 
