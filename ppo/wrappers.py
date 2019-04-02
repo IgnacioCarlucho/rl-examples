@@ -316,6 +316,6 @@ def wrappers(env):
         env = FireResetEnv(env)
     env = ProcessFrame84(env)
     # env = ImageToPyTorch(env)
-    #env = FrameStack_new(env, 4)
+    env = FrameStack_new(env, 4)
     env = ClippedRewardsWrapper(env)
     return env
