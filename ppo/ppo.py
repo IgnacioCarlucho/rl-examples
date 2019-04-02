@@ -15,10 +15,12 @@ import os
 import scipy.signal
 from gym import wrappers
 from datetime import datetime
-from time import time
+from time import time,sleep
 from utils import RunningStats, discount, add_histogram, str2bool
 import argparse
 import wrappers as wp
+import cv2
+
 OUTPUT_RESULTS_DIR = "./"
 
 
@@ -34,7 +36,7 @@ GAMMA = 0.99
 LAMBDA = 0.95
 ENTROPY_BETA = 0.01  # 0.01 for discrete, 0.0 for continuous
 LR = 0.0001
-BATCH = 8192  # 128 for discrete, 8192 for continuous
+BATCH = 1024 # 128 for discrete, 8192 for continuous
 MINIBATCH = 32
 EPOCHS = 10
 EPSILON = 0.1
@@ -47,7 +49,7 @@ MODEL_RESTORE_PATH = None
 
 
 class PPO(object):
-    def __init__(self, environment, summary_dir="./", gpu=False, greyscale=True):
+    def __init__(self, environment, summary_dir="./", gpu=False, greyscale=False):
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
         config = tf.ConfigProto(log_device_placement=False, device_count={'GPU': gpu})
         config.gpu_options.per_process_gpu_memory_fraction = 0.1
@@ -263,6 +265,13 @@ if __name__ == '__main__':
         s = env.reset()
         ep_r, ep_t, ep_a = 0, 0, []
 
+        print(s.shape,ppo.greyscale)
+        #numpy_horizontal = np.hstack((np.array(s)[:,:,0], np.array(s)[:,:,1], np.array(s)[:,:,2],np.array(s)[:,:,3]))
+        #cv2.imshow('image', numpy_horizontal)
+        #cv2.waitKey(1)
+        #print(s)
+        #sleep(1)
+        exit()
         while True:
             a, v = ppo.evaluate_state(s)
 
